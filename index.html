@@ -44,9 +44,44 @@
             <div class="game-container">
                 <div class="board">
 
+                    <div>
+                        <label for="txtDimension">Dimensiones:</label>
+                        <input type="number" class="form-control" id="txtDimension" placeholder="Ingrese tamaño del tablero">
+                    </div>
+                    <div>
+                        <label for="txtMaxNivel">Máximo de movimientos:</label>
+                        <input type="number" class="form-control" id="txtMaxNivel" placeholder="Ingrese número máximo de movimientos">
+                    </div>
+                    <div>
+                        <label for="txtMovimientosDesordenar">Movimientos para desordenar:</label>
+                        <input type="number" class="form-control" id="txtMovimientosDesordenar" placeholder="Ingrese número movimientos para desordenar">
+                    </div>
+                    <div>
+                        <button id='btnStartB' type="button" class="btn btn-primary">Start Backtracking</button>
+                        <button id='btnStartA' type="button" class="btn btn-primary">Start A*</button>
+                    </div>
+                
+                    
+                
+                    <div id='divPuzzle'> 
+                    </div>
+
                 </div>
                 <div class="moves">
-                    
+                    <div id="InfoAlgoritmo">    
+                    </div>
+                    <div>
+                        <label>Cantidad de movimientos:</label>  
+                    </div>
+                    <div id="PuzzleCantidadMovimientos">  
+                    </div>
+                    <div>
+                        <label>Ruta de movimientos:</label>  
+                    </div>
+                    <div id="PuzzleInfo">    
+                    </div>
+                    <div id="PuzzleFinish">    
+                    </div>
                 </div>
             </div>
         </div>
@@ -61,6 +96,7 @@
         II Semestre - 2023
     </footer>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="./n-puzzle.js"></script>
 
 </body>
