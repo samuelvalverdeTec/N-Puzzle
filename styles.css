@@ -1,0 +1,96 @@
+*{
+    margin: 5px;
+    box-sizing: border-box;
+}
+
+body {
+    height: 95vh;
+    background: #faf8ef;
+    font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+    text-align: center;
+    color: #776e65;
+    font-size: 24px;
+    display: flex;
+    flex-direction: column;
+}
+
+header{
+    background: #beb799;
+    padding: 1em 0 2em 0;
+    color: black;
+    font-style: italic;
+    height: 40px;
+    text-align: center;
+}
+
+.main{
+    display: flex;
+    flex: 1;
+}
+
+.left{
+    padding: 3em 0 3em 0;
+    flex: 1 1 20px;
+}
+
+main{
+    background: #beb799;
+    padding: 3em 0 3em 0;
+    flex: 1 1 2000px;
+}
+
+.right{
+    padding: 3em 0 3em 0;
+    flex: 1 1 20px;
+}
+
+footer{
+    color: black;
+    font-size: 12px;
+    font-style: italic;
+    padding: 1em 0 1em 0;
+}
+
+.main-container{
+    background: #beb799;
+    display: flex;
+    flex: 1 1 2000px;
+}
+
+.options{
+    background: #1d2552;
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    padding: 5px;
+}
+
+.game-container{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.board{
+    background: #ae875f;
+    height: 80%;
+}
+
+.moves{
+    background: #ae875f;
+    height: 20%;
+}
+
+.img{
+    padding: 1%;
+}
+
+@media all and (max-width: 550px){
+    .main{
+        flex-direction: column;
+    }
+    main{
+        padding: 5em 0 5em 02
+    }
+}
