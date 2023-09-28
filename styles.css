@@ -3,13 +3,27 @@
     box-sizing: border-box;
 }
 
+.cell_puzzle {
+    width: 25px;
+    height: 25px;
+    text-align: center;
+  }
+  .color_red {
+    background-color: red;
+    color:white;
+  }
+  .color_blue {
+    background-color: blue;
+    color:white;
+  }
+
+
 body {
     height: 95vh;
     background: #faf8ef;
     font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
-    text-align: center;
     color: #776e65;
-    font-size: 24px;
+    font-size: 15px;
     display: flex;
     flex-direction: column;
 }
@@ -55,14 +69,15 @@ footer{
     background: #beb799;
     display: flex;
     flex: 1 1 2000px;
+    height: 100%;
 }
 
 .options{
     background: #1d2552;
     display: flex;
     flex-direction: column;
+    align-items: center;
     width: 20%;
-    padding: 5px;
 }
 
 .game-container{
@@ -79,7 +94,7 @@ footer{
 
 .moves{
     background: #ae875f;
-    height: 20%;
+    height: 27%;
 }
 
 .img{
