@@ -4,6 +4,10 @@
 //  Análisis de Algoritmos - GR 03
 //  II Semestre, 2023
 
+
+var nuevosPuzzlesG= null;
+var puzzlesProcesadosG = null;
+
 function crearMatriz(dimen)
 {
     var puzzle = new Array();
@@ -442,7 +446,7 @@ function solucionarPuzzleAEstrella(puzzle, meta) {
 	var solucion = null;
 	var listaPuzzles = new Array();
 	var puzzleActual;
-	var puzzlesProcesados = new Array();
+	puzzlesProcesadosG = new Array();
 
 	listaPuzzles.push(puzzle);
 	
@@ -455,14 +459,14 @@ function solucionarPuzzleAEstrella(puzzle, meta) {
 		}
 		
 		listaPuzzles.splice(0,1);
-        puzzlesProcesados.push(puzzleActual);
+        puzzlesProcesadosG.push(puzzleActual);
 		
-		var nuevosPuzzles = puzzleActual.obtenerSiguientesPuzzles(meta);
-		for (var i = 0; i < nuevosPuzzles.length; i++) {
+		nuevosPuzzlesG = puzzleActual.obtenerSiguientesPuzzles(meta);
+		for (var i = 0; i < nuevosPuzzlesG.length; i++) {
             var procesado = false;
-            for(var j = 0; j < puzzlesProcesados.length; j++)
+            for(var j = 0; j < puzzlesProcesadosG.length; j++)
             {
-                if(nuevosPuzzles[i].esIgual(puzzlesProcesados[j].estado))
+                if(nuevosPuzzlesG[i].esIgual(puzzlesProcesadosG[j].estado))
                 {
                     procesado = true;
                     break;
@@ -470,9 +474,27 @@ function solucionarPuzzleAEstrella(puzzle, meta) {
             }
             if(!procesado)
             {
-			    insertarOrdenado(listaPuzzles, nuevosPuzzles[i]);
+			    insertarOrdenado(listaPuzzles, nuevosPuzzlesG[i]);
             }
-		}		
+		}	
+        var puzzlesAbiertos = '';
+		var puzzlesCerrados = '';
+		for(var k = 0; k < 5; k++){
+			if(nuevosPuzzlesG[nuevosPuzzlesG.length-k-1] != null)
+			{
+			puzzlesAbiertos += nuevosPuzzlesG[nuevosPuzzlesG.length-k-1].estado + ' <-> ';
+			}
+			if(puzzlesProcesadosG[puzzlesProcesadosG.length-k-1] != null)
+			{
+				puzzlesCerrados += puzzlesProcesadosG[puzzlesProcesadosG.length-k-1].estado + ' <-> ';
+			}  
+		}
+        console.log('Nodos abiertos:');
+		console.log(puzzlesAbiertos);
+		console.log('Nodos cerrados:');
+		console.log(puzzlesCerrados);
+		console.log('**********************');
+		mostrarInfoNodosAE(puzzlesAbiertos, puzzlesCerrados);	
 	}
 	
 	return solucion;
@@ -490,6 +512,13 @@ function insertarOrdenado(listaPuzzles, puzzle) {
 	else {
 		listaPuzzles.splice(i, 0, puzzle);
 	}
+}
+
+function mostrarInfoNodosAE(puzzlesAbiertos, puzzlesCerrados){
+	var infoNodosAbiertos = $("#AENodosAbiertos");
+    infoNodosAbiertos.html(puzzlesAbiertos);
+	var infoNodosCerrados = $("#AENodosCerrados");
+	infoNodosCerrados.html(puzzlesCerrados);
 }
 
 
@@ -547,5 +576,7 @@ $('#btnStartA').click(function(){
     var Desorden = $('#txtMovimientosDesordenar').val();
     $('#PuzzleFinish').html('');
     $('#InfoAlgoritmo').html('EJECUTANDO CON A*');
+    $('#AENodosA').html('Nodos abiertos:');
+	$('#AENodosC').html('Nodos cerrados:');
     startPuzzle(null, Dimension, Desorden);
 })

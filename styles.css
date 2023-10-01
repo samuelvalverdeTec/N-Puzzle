@@ -68,7 +68,7 @@ footer{
     background: #beb799;
     display: flex;
     flex: 1 1 2000px;
-    height: 100%;
+    height: 150%;
 }
 
 .options{
@@ -93,7 +93,7 @@ footer{
 
 .moves{
     background: #ae875f;
-    height: 27%;
+    height: 30%;
 }
 
 .img{
