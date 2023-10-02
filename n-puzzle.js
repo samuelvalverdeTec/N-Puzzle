@@ -324,6 +324,7 @@ function displaySolucion(solucion) {
             solucionCompleta.push(puzzle);
             puzzle = puzzle.puzzlePadre;
         }
+		timerDibujar = null;
         displayAllPuzzle();
     }
     else
@@ -334,13 +335,18 @@ function displaySolucion(solucion) {
     }
 }
 
+var timerDibujar;
+
 function displayAllPuzzle() {
+	if(timerDibujar != null){
+		clearTimeout(timerDibujar);
+	}
 	var puzzle = solucionCompleta.pop();
 	var elem;
 	
 	if (puzzle != null) {
 		dibujarPuzzle(puzzle.estado, puzzle.path, puzzle.costo);
-		setTimeout(displayAllPuzzle, delay);
+		timerDibujar = setTimeout(displayAllPuzzle, delay);
 	}
 	else {
 		elem = $("#PuzzleFinish");
@@ -476,8 +482,8 @@ function solucionarPuzzleAEstrella(puzzle, meta) {
             {
 			    insertarOrdenado(listaPuzzles, nuevosPuzzlesG[i]);
             }
-		}	
-        var puzzlesAbiertos = '';
+		}		
+		var puzzlesAbiertos = '';
 		var puzzlesCerrados = '';
 		for(var k = 0; k < 5; k++){
 			if(nuevosPuzzlesG[nuevosPuzzlesG.length-k-1] != null)
@@ -489,16 +495,100 @@ function solucionarPuzzleAEstrella(puzzle, meta) {
 				puzzlesCerrados += puzzlesProcesadosG[puzzlesProcesadosG.length-k-1].estado + ' <-> ';
 			}  
 		}
-        console.log('Nodos abiertos:');
+		console.log('Nodos abiertos:');
 		console.log(puzzlesAbiertos);
 		console.log('Nodos cerrados:');
 		console.log(puzzlesCerrados);
 		console.log('**********************');
-		mostrarInfoNodosAE(puzzlesAbiertos, puzzlesCerrados);	
+		mostrarInfoNodosAE(puzzlesAbiertos, puzzlesCerrados);
 	}
-	
 	return solucion;
 }
+
+
+//SOLUCIÓN A* CON TIMER PARA MOSTRAR NODOS ABIERTOS Y CERRADOS #######################################################################
+
+var solucionTimer = null;
+var listaPuzzlesTimer = null;
+var puzzlesProcesadosTimer = null;
+var metaTimer = null;
+var timer = null;
+var delayTimer = 10;
+
+function solucionarPuzzleAEstrellaTimer(puzzle, meta) {
+	metaTimer = meta;
+	solucionTimer = null;
+	listaPuzzlesTimer = new Array();
+	puzzlesProcesadosTimer = new Array();
+
+	listaPuzzlesTimer.push(puzzle);
+
+	timer = setTimeout(iterarTimer, delayTimer);
+
+}
+	
+function iterarTimer(){
+	clearTimeout(timer);
+	var puzzleActual;
+	var nuevosPuzzlesTimer;
+	if (listaPuzzlesTimer.length > 0)
+	{
+		puzzleActual = listaPuzzlesTimer[0];
+		if (puzzleActual.esIgual(metaTimer)) {
+			solucionTimer = puzzleActual;
+			solucionCompleta = new Array();
+        	displaySolucion(solucionTimer);
+		}
+		else{
+			listaPuzzlesTimer.splice(0,1);
+			puzzlesProcesadosTimer.push(puzzleActual);
+			
+			nuevosPuzzlesTimer = puzzleActual.obtenerSiguientesPuzzles(metaTimer);
+			for (var i = 0; i < nuevosPuzzlesTimer.length; i++) {
+				var procesado = false;
+				for(var j = 0; j < puzzlesProcesadosTimer.length; j++)
+				{
+					if(nuevosPuzzlesTimer[i].esIgual(puzzlesProcesadosTimer[j].estado))
+					{
+						procesado = true;
+						break;
+					}
+				}
+				if(!procesado)
+				{
+					insertarOrdenado(listaPuzzlesTimer, nuevosPuzzlesTimer[i]);
+				}
+
+				var puzzlesAbiertos = '';
+				var puzzlesCerrados = '';
+				for(var k = 0; k < 5; k++){
+					if(nuevosPuzzlesTimer[nuevosPuzzlesTimer.length-k-1] != null)
+					{
+					puzzlesAbiertos += nuevosPuzzlesTimer[nuevosPuzzlesTimer.length-k-1].estado + ' <-> ';
+					}
+					if(puzzlesProcesadosTimer[puzzlesProcesadosTimer.length-k-1] != null)
+					{
+						puzzlesCerrados += puzzlesProcesadosTimer[puzzlesProcesadosTimer.length-k-1].estado + ' <-> ';
+					}  
+				}
+				console.log('Nodos abiertos:');
+				console.log(puzzlesAbiertos);
+				console.log('Nodos cerrados:');
+				console.log(puzzlesCerrados);
+				console.log('**********************');
+				mostrarInfoNodosAE(puzzlesAbiertos, puzzlesCerrados);
+
+				timer = setTimeout(iterarTimer, delayTimer);
+			}		
+		}
+	}
+	else{
+		solucionCompleta = new Array();
+        displaySolucion(solucionTimer);
+	}
+}
+
+//************************************************************************ */
 
 
 function insertarOrdenado(listaPuzzles, puzzle) {
@@ -513,6 +603,7 @@ function insertarOrdenado(listaPuzzles, puzzle) {
 		listaPuzzles.splice(i, 0, puzzle);
 	}
 }
+
 
 function mostrarInfoNodosAE(puzzlesAbiertos, puzzlesCerrados){
 	var infoNodosAbiertos = $("#AENodosAbiertos");
@@ -549,13 +640,16 @@ function startPuzzle(maxNivel, dimension, desorden)
         {
             //var solucion = solucionarPuzzleBacktracking(puzzle, metaPuzzle, maxNivel);
             var solucion = solucionarMejorPuzzleBacktracking(puzzle, metaPuzzle, maxNivel);
+			solucionCompleta = new Array();
+        	displaySolucion(solucion); 
         }
         else
         {
-            var solucion = solucionarPuzzleAEstrella(puzzle, metaPuzzle);
-        }
-        solucionCompleta = new Array();
-        displaySolucion(solucion); 
+            //var solucion = solucionarPuzzleAEstrella(puzzle, metaPuzzle);	
+			//solucionCompleta = new Array();
+        	//displaySolucion(solucion); 
+			solucionarPuzzleAEstrellaTimer(puzzle, metaPuzzle);
+        }     
     }, 2000);
     
 }
@@ -576,7 +670,9 @@ $('#btnStartA').click(function(){
     var Desorden = $('#txtMovimientosDesordenar').val();
     $('#PuzzleFinish').html('');
     $('#InfoAlgoritmo').html('EJECUTANDO CON A*');
-    $('#AENodosA').html('Nodos abiertos:');
+	$('#AENodosA').html('Nodos abiertos:');
 	$('#AENodosC').html('Nodos cerrados:');
+	$("#AENodosAbiertos").html('');
+	$("#AENodosCerrados").html('');
     startPuzzle(null, Dimension, Desorden);
 })
